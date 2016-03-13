@@ -153,13 +153,19 @@ def delete(key):
 def listAllKeys():
     global hashTable
     keys = []
+    opFile = open("output.txt", "a+")
+    opFile.write("# ---------------------------------------------------------------\n")
+    opFile.write("# Current state of hash table\n")
+    opFile.write("# ---------------------------------------------------------------\n")
     for i in range(0, len(hashTable)):
         currNode = hashTable[i]
         while currNode.get_val() != -1:
             keys.append("key: "+currNode.get_key()+", value: "+str(currNode.get_val())+", positions: "+str(currNode.get_pos()))
             currNode = currNode.get_nxt()
-        print "Current bucket: ", i, ", Entries: ", keys
+        print "Current bucket: " + str(i) + ", Entries: " + str(keys)
+        opFile.write("Current bucket: " + str(i) + ", Entries: " + str(keys) + "\n")
         keys = []
+    opFile.close()
 
 
 # ---------------------------------------------------------------
