@@ -197,16 +197,16 @@ def main():
     listAllKeys()
 
     # Deleting a key
-    keyToBeRemoved = "But"
-    print "# ---------------------------------------------------------------"
-    print "# Deleting '" + keyToBeRemoved + "' from the hash table"
-    print "# ---------------------------------------------------------------"
-    if delete(keyToBeRemoved):
-        print "All instances of '" + keyToBeRemoved + "' were removed successfully!"
-        # Listing all the keys in the table again
-        listAllKeys()
-    else:
-        print "No instances found for '" + keyToBeRemoved + "'!"
+    #keyToBeRemoved = "But"
+    #print "# ---------------------------------------------------------------"
+    #print "# Deleting '" + keyToBeRemoved + "' from the hash table"
+    #print "# ---------------------------------------------------------------"
+    #if delete(keyToBeRemoved):
+    #    print "All instances of '" + keyToBeRemoved + "' were removed successfully!"
+    #    # Listing all the keys in the table again
+    #    listAllKeys()
+    #else:
+    #    print "No instances found for '" + keyToBeRemoved + "'!"
 
 
 if __name__ == "__main__":

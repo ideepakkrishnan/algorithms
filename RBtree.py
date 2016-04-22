@@ -275,7 +275,8 @@ def node_color(node):
 
 def main():
     # Initialize and print the RB tree
-    keys = [3, 7, 12, 15, 20, 35, 39, 10, 16, 19, 23, 28, 38, 14, 21, 30, 47, 17, 41, 26]
+    #keys = [3, 7, 12, 15, 20, 35, 39, 10, 16, 19, 23, 28, 38, 14, 21, 30, 47, 17, 41, 26]
+    keys = [3]
     print "Keys used to initialize the RB tree: ", str(keys)
     rbtree = tree()
     rbtree = generate_tree(rbtree, keys)
