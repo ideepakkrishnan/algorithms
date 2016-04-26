@@ -2,8 +2,8 @@
 # GLOBALS
 # ---------------------------------------------------------------
 
-RED = True
-BLACK = False
+RED = "red"
+BLACK = "black"
 
 # ---------------------------------------------------------------
 # CLASSES
@@ -87,10 +87,8 @@ class tree(object):
         # x represents the root of the tree
         if x is None:
             x = self.root
-        while x != self.nil:
-            if key == x.get_key():
-                return x
-            elif key < x.get_key():
+        while x != self.nil and key != x.get_key():
+            if key < x.get_key():
                 x = x.get_left()
             else:
                 x = x.get_right()
@@ -135,7 +133,7 @@ class tree(object):
         self.insert_fixup(z)
 
     def insert_fixup(self, z):
-        while z.get_parent().get_color == RED:
+        while z.get_parent().get_color() == RED:
             if z.get_parent() == z.get_parent().get_parent().get_left():
                 y = z.get_parent().get_parent().get_right()
                 if y.get_color() == RED:
@@ -167,6 +165,7 @@ class tree(object):
         self.root.set_color(BLACK)
 
     def left_rotate(self, x):
+        print "inside left rotate for: " + str(x.get_key())
         y = x.get_right()
         x.set_right(y.get_left())
         if y.get_left() != self.nil:
@@ -182,6 +181,7 @@ class tree(object):
         x.set_parent(y)
 
     def right_rotate(self, y):
+        print "inside right rotate for: " + str(y.get_key())
         x = y.get_left()
         y.set_left(x.get_right())
         if x.get_right() != self.nil:
@@ -239,20 +239,22 @@ class tree(object):
 
     def print_tree(self):
         def visit_node(node):
-            print str(node_id(node)) + ": [key: " + str(node.get_key()) + ", color: ", node_color(node) + "]"
             if node.get_left():
                 visit_node(node.get_left())
-                print str(node_id(node)) + " -> " + str(node_id(node.get_left()))
+                print "[Key: " + str(node.get_key()) + ", color: " + node.get_color() + "] -> Left child: [Key: " + \
+                      str(node.get_left().get_key()) + ", color: " + node.get_left().get_color() + "]"
             if node.get_right():
                 visit_node(node.get_right())
-                print str(node_id(node)) + " -> " + str(node_id(node.get_right()))
+                print "[Key: " + str(node.get_key()) + ", color: " + node.get_color() + "] -> Right child: [Key: " + \
+                      str(node.get_right().get_key()) + ", color: " + node.get_right().get_color() + "]"
 
-        print "Current state of RB tree:"
+        print "Current state of RB tree: Root: [key: " + str(self.root.get_key()) + ", color: " + \
+              self.root.get_color() + "]"
         visit_node(self.root)
 
 
 def generate_tree(t, keys):
-    assert t.validate_rb_properties()
+    #assert t.validate_rb_properties()
     for i, key in enumerate(keys):
         for k in keys[:i]:
             assert t.nil != t.search(k)
@@ -275,8 +277,7 @@ def node_color(node):
 
 def main():
     # Initialize and print the RB tree
-    #keys = [3, 7, 12, 15, 20, 35, 39, 10, 16, 19, 23, 28, 38, 14, 21, 30, 47, 17, 41, 26]
-    keys = [3]
+    keys = [3, 7, 12, 15]
     print "Keys used to initialize the RB tree: ", str(keys)
     rbtree = tree()
     rbtree = generate_tree(rbtree, keys)
@@ -319,11 +320,11 @@ def main():
         elif ip == 6:
             key = input('Enter the key whose successor is to be found: ')
             keyNode = rbtree.successor(key)
-            print str(node_id(keyNode)) + ": [key: " + str(keyNode.get_key()) + ", color: ", node_color(keyNode) + "]"
+            print "[key: " + str(keyNode.get_key()) + ", color: ", node_color(keyNode) + "]"
         elif ip == 7:
             key = input('Enter the key whose predecessor is to be found: ')
             keyNode = rbtree.predecessor(key)
-            print str(node_id(keyNode)) + ": [key: " + str(keyNode.get_key()) + ", color: ", node_color(keyNode) + "]"
+            print "[key: " + str(keyNode.get_key()) + ", color: ", node_color(keyNode) + "]"
         elif ip == 8:
             rbtree.print_tree()
         else:
