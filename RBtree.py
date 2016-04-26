@@ -277,7 +277,7 @@ def node_color(node):
 
 def main():
     # Initialize and print the RB tree
-    keys = [3, 7, 12, 15]
+    keys = [10]
     print "Keys used to initialize the RB tree: ", str(keys)
     rbtree = tree()
     rbtree = generate_tree(rbtree, keys)
