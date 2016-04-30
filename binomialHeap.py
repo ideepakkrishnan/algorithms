@@ -111,7 +111,10 @@ class Node:
         for i in range(0, self.get_degree()):
             result += "  "
 
-        result += ("key = " + str(self.get_key()) + ", degree = " + str(self.get_degree()) + "\n")
+        if self.get_parent():
+            result += ("key = " + str(self.get_key()) + ", parent = " + str(self.get_parent().get_key()) + "\n")
+        else:
+            result += ("key = " + str(self.get_key()) + ", root\n")
 
         x = self.get_child()
         while x is not None:
@@ -386,75 +389,43 @@ def main():
 
     # Insert procedures for heap1
     heap1.binomial_heap_insert(Node(37))
+    #print "Initializing Heap 1:"
+    #heap1.binomial_heap_walk()
     heap1.binomial_heap_insert(Node(41))
+    #print "Initializing Heap 2:"
+    #heap1.binomial_heap_walk()
+    heap1.binomial_heap_insert(Node(12))
+    #print "Initializing Heap 3:"
+    #heap1.binomial_heap_walk()
+    heap1.binomial_heap_insert(Node(55))
     print "Initializing Heap 1:"
     heap1.binomial_heap_walk()
 
-    # Creating another test heap
     heap2 = make_binomial_heap()
-
-    # Insert operations for heap2
+    heap2.binomial_heap_insert(Node(12))
+    heap2.binomial_heap_insert(Node(36))
+    heap2.binomial_heap_insert(Node(1))
     heap2.binomial_heap_insert(Node(10))
-    heap2.binomial_heap_insert(Node(28))
-    heap2.binomial_heap_insert(Node(77))
-    heap2.binomial_heap_insert(Node(13))
+    heap2.binomial_heap_insert(Node(22))
     print "Initializing Heap 2:"
     heap2.binomial_heap_walk()
 
-    # Union of both heaps
     heap1.binomial_heap_union(heap2.get_head())
-    print "Union of heap 1 and heap 2:"
-    heap1.binomial_heap_walk()
-
-    # Creating another test heap
-    heap3 = make_binomial_heap()
-    heap3.binomial_heap_insert(Node(1))
-    heap3.binomial_heap_insert(Node(6))
-    heap3.binomial_heap_insert(Node(16))
-    heap3.binomial_heap_insert(Node(12))
-    heap3.binomial_heap_insert(Node(25))
-    heap3.binomial_heap_insert(Node(8))
-    heap3.binomial_heap_insert(Node(14))
-    heap3.binomial_heap_insert(Node(29))
-    heap3.binomial_heap_insert(Node(26))
-    heap3.binomial_heap_insert(Node(23))
-    heap3.binomial_heap_insert(Node(18))
-    heap3.binomial_heap_insert(Node(11))
-    heap3.binomial_heap_insert(Node(17))
-    heap3.binomial_heap_insert(Node(38))
-    heap3.binomial_heap_insert(Node(42))
-    heap3.binomial_heap_insert(Node(27))
-
-    print "Initializing heap 3:"
-    heap3.binomial_heap_walk()
-
-    # Union of heap 3 with heap 1
-    heap1.binomial_heap_union(heap3.get_head())
     print "Union of heap 1 and heap 3:"
     heap1.binomial_heap_walk()
 
-    # Minimum value in heap 1
-    print "Minimum value in heap 1: ", str(heap1.binomial_heap_minimum().get_key())
+    print "Extracting min: " + str(heap1.binomial_heap_extract_min())
+    print "Heap after extraction:"
+    print heap1.binomial_heap_walk()
 
-    # Extract min from heap 1
-    print "Extracted minimum value from heap 1: ", str(heap1.binomial_heap_extract_min())
-    print "Heap after first extract min:"
-    heap1.binomial_heap_walk()
+    print "Decreasing 55 to 7"
+    print heap1.binomial_heap_decrease_key(55, 7)
+    print heap1.binomial_heap_walk()
 
-    # Extract min from heap 1
-    print "Extracted minimum value from heap 1: ", str(heap1.binomial_heap_extract_min())
-    print "Heap after second extract min:"
-    heap1.binomial_heap_walk()
+    print "Deleting 36"
+    heap1.binomial_heap_delete(36)
+    print heap1.binomial_heap_walk()
 
-    # Decrease key in heap 1
-    heap1.binomial_heap_decrease_key(42, 19)
-    print "Heap after decrease key:"
-    heap1.binomial_heap_walk()
-
-    # Deleting key from heap
-    heap1.binomial_heap_delete(heap1.binomial_node_search(8))
-    print "Heap after delete:"
-    heap1.binomial_heap_walk()
 
 
 if __name__ == "__main__":

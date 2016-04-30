@@ -112,6 +112,9 @@ class tree(object):
         self.insert_node(self.create_node(key))
 
     def insert_node(self, z):
+        """
+        Insert a node into the tree.
+        """
         y = self.nil
         x = self.root
         while x != self.nil:
@@ -133,24 +136,37 @@ class tree(object):
         self.insert_fixup(z)
 
     def insert_fixup(self, z):
+        """
+        Restore the red-black properties after insert.
+        """
         while z.get_parent().get_color() == RED:
-            if z.get_parent() == z.get_parent().get_parent().get_left():
-                y = z.get_parent().get_parent().get_right()
+            if z.get_parent() == z.get_parent().get_parent().get_left():  # parent of z is a left child
+                y = z.get_parent().get_parent().get_right()  # uncle of z
                 if y.get_color() == RED:
+                    # Case 1: z (left/right child) - red, z.parent - red, z.uncle - red
+                    # Solution: Change the color of parent and uncle to black
+                    # Parent of z and uncle of z are both red this means you can re-color them to black
+                    # to make sure that the black-height didn't change, you have to re-color their parent to
+                    # red. Then you have to continue checking.
                     z.get_parent().set_color(BLACK)
                     y.set_color(BLACK)
                     z.get_parent().get_parent().set_color(RED)
                     z = z.get_parent().get_parent()
                 else:
+                    # Case 2: z (right child) - red, z.parent - red, z.uncle - black
+                    # Solution: Transform case 2 into case 3 by left rotation
                     if z == z.get_parent().get_right():
                         z = z.get_parent()
                         self.left_rotate(z)
+                    # Case 3: z (left child) - red, z.parent - red, z.uncle - black
+                    # Solution: Change the color of parent to black and grand parent to red followed by a right rotate
+                    # on parent
                     z.get_parent().set_color(BLACK)
-                    z.get_parent().get_parent().set_color(RED)
+                    z.get_parent().get_parent().set_color(RED)  # set grand parent to red, since z's parent is black
                     self.right_rotate(z.get_parent().get_parent())
-            else:
-                y = z.get_parent().get_parent().get_left()
-                if y.get_color == RED:
+            else:  # parent of z is a right child
+                y = z.get_parent().get_parent().get_left()  # uncle of z
+                if y.get_color() == RED:
                     z.get_parent().set_color(BLACK)
                     y.set_color(BLACK)
                     z.get_parent().get_parent().set_color(RED)
@@ -165,7 +181,14 @@ class tree(object):
         self.root.set_color(BLACK)
 
     def left_rotate(self, x):
-        print "inside left rotate for: " + str(x.get_key())
+        """ Left rotate x. """
+        #       W                                  S
+        #      / \        Right-Rotate(S,W)       / \
+        #     /   \           -------->          /   \
+        #    S     Y                            G     W
+        #   / \               <--------              / \
+        #  /   \          Left-Rotate(W,S)          /   \
+        # G     U                                  U     Y
         y = x.get_right()
         x.set_right(y.get_left())
         if y.get_left() != self.nil:
@@ -181,7 +204,7 @@ class tree(object):
         x.set_parent(y)
 
     def right_rotate(self, y):
-        print "inside right rotate for: " + str(y.get_key())
+        #print "inside right rotate for: " + str(y.get_key())
         x = y.get_left()
         y.set_left(x.get_right())
         if x.get_right() != self.nil:
@@ -233,20 +256,17 @@ class tree(object):
         else:
             return 0, True
 
-    def validate_rb_properties(self):
-        black_count, validity = self.is_valid_rb_node(self.root)
-        return validity and not self.root.get_color()
-
     def print_tree(self):
         def visit_node(node):
-            if node.get_left():
-                visit_node(node.get_left())
-                print "[Key: " + str(node.get_key()) + ", color: " + node.get_color() + "] -> Left child: [Key: " + \
-                      str(node.get_left().get_key()) + ", color: " + node.get_left().get_color() + "]"
-            if node.get_right():
-                visit_node(node.get_right())
-                print "[Key: " + str(node.get_key()) + ", color: " + node.get_color() + "] -> Right child: [Key: " + \
-                      str(node.get_right().get_key()) + ", color: " + node.get_right().get_color() + "]"
+            if node.get_key():
+                if node.get_left():
+                    visit_node(node.get_left())
+                    print "[Key: " + str(node.get_key()) + ", color: " + node.get_color() + "] -> Left child: [Key: " + \
+                          str(node.get_left().get_key()) + ", color: " + node.get_left().get_color() + "]"
+                if node.get_right():
+                    visit_node(node.get_right())
+                    print "[Key: " + str(node.get_key()) + ", color: " + node.get_color() + "] -> Right child: [Key: " + \
+                          str(node.get_right().get_key()) + ", color: " + node.get_right().get_color() + "]"
 
         print "Current state of RB tree: Root: [key: " + str(self.root.get_key()) + ", color: " + \
               self.root.get_color() + "]"
@@ -254,7 +274,6 @@ class tree(object):
 
 
 def generate_tree(t, keys):
-    #assert t.validate_rb_properties()
     for i, key in enumerate(keys):
         for k in keys[:i]:
             assert t.nil != t.search(k)
@@ -277,7 +296,7 @@ def node_color(node):
 
 def main():
     # Initialize and print the RB tree
-    keys = [10]
+    keys = [10, 85, 15, 70, 20, 60, 30, 50, 65, 80, 90, 40, 5, 55]
     print "Keys used to initialize the RB tree: ", str(keys)
     rbtree = tree()
     rbtree = generate_tree(rbtree, keys)
